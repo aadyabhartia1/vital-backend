@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  clerkId       String         @unique
+  name          String
+  email         String         @unique
+  age           Int?
+  gender        String?
+  createdAt     DateTime       @default(now())
+  healthLogs    HealthLog[]
+  habits        Habit[]
+  insights      AIInsight[]
+  notifications Notification[]
+  emergencyCard EmergencyCard?
+}
+
+model HealthLog {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  calories      Int      @default(0)
+  waterIntake   Float    @default(0)
+  sleepHours    Float    @default(0)
+  sleepQuality  Int      @default(0)
+  heartRate     Int      @default(0)
+  mood          String   @default("neutral")
+  stressLevel   Int      @default(0)
+  activityScore Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Habit {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  icon      String   @default("🔥")
+  streak    Int      @default(0)
+  completed Boolean  @default(false)
+  xpReward  Int      @default(10)
+  category  String   @default("wellness")
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model AIInsight {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  insight    String
+  category   String
+  riskLevel  String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  type        String   @default("reminder")
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+}
+
+model EmergencyCard {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bloodGroup        String
+  emergencyContacts Json     @default("[]") // Store as JSON array [{name, phone, relation}]
+  allergies         String[] @default([])
+  medicalConditions String[] @default([])
+  createdAt         DateTime @default(now())
+}
