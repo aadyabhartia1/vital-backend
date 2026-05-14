@@ -17,7 +17,7 @@ const getOrCreateUser = async (clerkId: string) => {
 
 export const getDashboardData = async (req: Request, res: Response) => {
   try {
-    const clerkId = getAuth(req).userId;
+    const clerkId = getAuth(req).userId as string;
     const user = await getOrCreateUser(clerkId);
 
     // Fetch user's data
@@ -66,7 +66,7 @@ export const getDashboardData = async (req: Request, res: Response) => {
 export const addWater = async (req: Request, res: Response) => {
   try {
     const { amount } = req.body;
-    const clerkId = getAuth(req).userId;
+    const clerkId = getAuth(req).userId as string;
     const user = await getOrCreateUser(clerkId);
 
     const todayStart = new Date();
@@ -97,7 +97,7 @@ export const addWater = async (req: Request, res: Response) => {
 export const logMood = async (req: Request, res: Response) => {
   try {
     const { mood } = req.body;
-    const clerkId = getAuth(req).userId;
+    const clerkId = getAuth(req).userId as string;
     const user = await getOrCreateUser(clerkId);
 
     const todayStart = new Date();
@@ -127,7 +127,7 @@ export const logMood = async (req: Request, res: Response) => {
 export const logMetrics = async (req: Request, res: Response) => {
   try {
     const { sleepHours, heartRate, activityScore, waterIntake } = req.body;
-    const clerkId = getAuth(req).userId;
+    const clerkId = getAuth(req).userId as string;
     const user = await getOrCreateUser(clerkId);
 
     const todayStart = new Date();

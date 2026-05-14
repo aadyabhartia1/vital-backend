@@ -10,7 +10,7 @@ const openai = new OpenAI({
 export const chatWithAssistant = async (req: Request, res: Response) => {
   try {
     const { message } = req.body;
-    const clerkId = getAuth(req).userId;
+    const clerkId = getAuth(req).userId as string;
 
     const user = await prisma.user.findUnique({ where: { clerkId } });
     if (!user) {
