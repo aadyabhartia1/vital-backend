@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -21,7 +21,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(clerkMiddleware());
 
 // Health check
-app.get("/api/health", (_req, res) => {
+app.get("/", (_req: Request, res: Response) => {
+  res.send("Vitalis API is running...");
+});
+
+app.get("/api/health", (_req: Request, res: Response) => {
   res.json({ status: "ok", timestamp: new Date().toISOString(), service: "vitalis-ai-backend" });
 });
 
